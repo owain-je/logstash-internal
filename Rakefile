@@ -23,6 +23,10 @@ latest_tag="#{base_tag}:latest"
 repo_latest_tag="#{repository}/#{latest_tag}"
 repo_latest_version_tag="#{repository}/#{version_tag}"
 
+logstash_download_url=get_env('LOGSTASH_DOWNLOAD_URL',"https://artifacts.elastic.co/downloads/logstash/logstash-5.1.1.tar.gz")
+elastic_version=get_env('ELASTIC_VERSION',"5.1.1")
+
+
 module Utils
   class Subprocess
     def initialize(cmd, &block)
@@ -111,7 +115,7 @@ end
 
 task :build do
    puts("Building #{base_tag}")
-   execute_cmd("docker build -t #{base_tag} .")
+   execute_cmd("docker build --build-arg LOGSTASH_DOWNLOAD_URL=#{logstash_download_url} --build-arg ELASTIC_VERSION=#{elastic_version} -t #{base_tag} .")
 end
 
 task :login do 
